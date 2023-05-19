@@ -38,7 +38,7 @@ cdef extern from "libcpmfem.h":
 	int* ctag_m,
 	float* PART_matrix)
 	
-cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC, PART_matrix):
+cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC, PART_matrix, **kwargs):
 	'''
 	Simulates VCT model
 	Args:
@@ -74,6 +74,8 @@ cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double siz
 				k=j+NVX*i
 				matrix[k]=PART_matrix[i][j]
 	cfg = parse_config('./utils/config.yaml', scenario)
+	for arg, value in kwargs.items():
+		cfg[arg]=value
 	cpmfem(NCX, NCY, PART, VOXSIZE, NVX, NVY, cfg['GN_CM'], cfg['GN_FB'], cfg['TARGETVOLUME_CM'], cfg['TARGETVOLUME_FB'], cfg['DETACH_CM'], cfg['DETACH_FB'], cfg['INELASTICITY_FB'], cfg['INELASTICITY_CM'],  cfg['JCMMD'], cfg['JFBMD'], cfg['JCMCM'], cfg['JFBFB'], cfg['JFBCM'], cfg['UNLEASH_CM'], cfg['UNLEASH_FB'], cfg['LMAX_CM'], cfg['LMAX_FB'], cfg['MAX_FOCALS_CM'], cfg['MAX_FOCALS_FB'], cfg['shifts'], cfg['distanceF'], NRINC, typ, cont_m, fibr, ctag_m, matrix)
 	types=[]
 	ctags=[]
@@ -86,9 +88,9 @@ cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double siz
 	for i in range(NVX):
 		for j in range(NVY):
 			k=i+j*NVX
-			ctags[i].append(ctag_m[k])
-			fibers[i].append(fibr[k])
-			contacts[i].append(cont_m[k])
+			ctags[j].append(ctag_m[k])
+			fibers[j].append(fibr[k])
+			contacts[j].append(cont_m[k])
 	for i in range(NCX*NCY):
 		types.append(int(typ[i]))
 	
