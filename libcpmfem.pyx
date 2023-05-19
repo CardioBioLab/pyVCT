@@ -38,7 +38,7 @@ cdef extern from "libcpmfem.h":
 	int* ctag_m,
 	float* PART_matrix)
 	
-cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC, PART_matrix, **kwargs):
+def py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC, PART_matrix, **kwargs):
 	'''
 	Simulates VCT model
 	Args:
