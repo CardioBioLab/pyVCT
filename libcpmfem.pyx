@@ -1,13 +1,14 @@
 from utils.parse_config import parse_config
-from libc.stdlib cimport malloc, free
-import numpy as np
 
+from libc.stdlib cimport free, malloc
+
+import numpy as np
 from Cython.Compiler import Options
 
 Options.docstrings = True
 
 cdef extern from "libcpmfem.h":
-	int cpmfem(int NCX, int NCY, 
+	int cpmfem(int NCX, int NCY,
 	double PART,
 	double VOXSIZE,
 	int NVX, int NVY,
@@ -36,7 +37,7 @@ cdef extern from "libcpmfem.h":
 	int* cont_m,
 	int* fibr,
 	int* ctag_m)
-	
+
 cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC):
 	'''
 	Simulates VCT model
@@ -81,14 +82,13 @@ cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double siz
 			contacts[i].append(cont_m[k])
 	for i in range(NCX*NCY):
 		types.append(int(typ[i]))
-	
+
 	types=np.array(types)
 	ctags=np.array(ctags)
 	fibers=np.array(fibers)
-	contacts=np.array(contacts)		
+	contacts=np.array(contacts)
 	free(typ)
 	free(cont_m)
 	free(fibr)
 	free(ctag_m)
 	return types, ctags, fibers, contacts
-

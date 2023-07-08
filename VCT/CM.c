@@ -8,7 +8,7 @@ CM* allocCM(int NRc)
 	CM* CMs;
 
 	CMs = calloc(NRc+1, sizeof(CM));
-	
+
 	return CMs;
 }
 

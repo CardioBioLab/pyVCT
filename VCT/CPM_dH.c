@@ -45,7 +45,7 @@ double calcdHborder(VOX* pv, int xt, int ttag, int NVX)
 			break;
 		}
 	}
-	
+
 	return dHcontact;
 }
 
@@ -115,7 +115,7 @@ double printdH(VOX* pv, FIBERS* pf, CM* CMs, int* csize, int xt, int xs, int pic
 	printf("dHfocals = %.2f\n",LMAX_CM);
 	printf("dHsyncytium = %.2f\n",LMAX_FB);
 	printf("dHnuclei = %.2f\n",GN_CM);
-	
+
 
 }
 */
@@ -132,7 +132,7 @@ double calcdHsyncytium(VOX* pv, CM* CMs, int xt, int xs, int ttag, int stag, int
 	if(pv[xs].bond!=0){
 
 		xsy = xs/NVX - CMs[stag].y; xsx = (xs%NVX) - CMs[stag].x;
-		
+
 		xb = pv[xs].bond;
 		btag = pv[xb].ctag;
 		xby = xb/NVX - CMs[btag].y; xbx = (xb%NVX) - CMs[btag].x;
@@ -142,7 +142,7 @@ double calcdHsyncytium(VOX* pv, CM* CMs, int xt, int xs, int ttag, int stag, int
 
 		vx = xsx/normX + xbx/normB;
 		vy = xsy/normX + xby/normB;
-		
+
 		dH += E_bond * (2 - sqrt(vx*vx+vy*vy));
 
 	}
@@ -150,7 +150,7 @@ double calcdHsyncytium(VOX* pv, CM* CMs, int xt, int xs, int ttag, int stag, int
 	if(pv[xt].bond!=0){
 
 		xsy = xt/NVX - CMs[ttag].y; xsx = (xt%NVX) - CMs[ttag].x;
-		
+
 		xb = pv[xt].bond;
 		btag = pv[xb].ctag;
 		xby = xb/NVX - CMs[btag].y; xbx = (xb%NVX) - CMs[btag].x;
@@ -160,7 +160,7 @@ double calcdHsyncytium(VOX* pv, CM* CMs, int xt, int xs, int ttag, int stag, int
 
 		vx = xsx/normX + xbx/normB;
 		vy = xsy/normX + xby/normB;
-		
+
 		dH += E_bond * (2 - sqrt(vx*vx+vy*vy));
 
 	}
@@ -223,7 +223,7 @@ double contactenergy(int tag1, int tag2, int type1, int type2, double JCMCM, dou
  //    		if(type1==type2)
  //    			if(cont1 && cont2)
  //    				J = (type1==1 ? JCMCMc : JFBFBc);
- //    			else 
+ //    			else
  //    				J = (type1==1 ? JCMCM : JFBFB);
  //    		else
  //    			if(cont1 && cont2)
@@ -276,20 +276,20 @@ double calcdHprotrude(VOX* pv, CM* CMs, int xt, int xs, int ttag, int stag, int 
 	}
 
 	if(pv[xs].contact){
-		
+
 		distt = dist(CMs,xt,stag, NVX);
 		dists = dist(CMs,xs,stag, NVX);
-		dH = GN(pv[xs].type)*( 	(distt < LMAX(pv[xs].type) ? 1/distt : INF)	*fabs(1/cost) - 
+		dH = GN(pv[xs].type)*( 	(distt < LMAX(pv[xs].type) ? 1/distt : INF)	*fabs(1/cost) -
 								(dists < LMAX(pv[xs].type) ? 1/dists : 0)	*fabs(1/coss)
 							);															//protrusions grow up to LMAX, then have to stop or be erased
 		if(pv[xt].contact)
 			dH += DETACH(pv[xt].type);													//if we copy one contact over the other, it means that we detach target focal adhesion
-		
+
 		if(Qs && !Qt)
 			dH += UNLEASH(pv[xs].type);
 	}else{
 		//focals can be erased with the penalty
-		if(pv[xt].contact)	
+		if(pv[xt].contact)
 			dH = DETACH(pv[xt].type);
 		else
 			dH = 0;																		//if source and target are both not focals
@@ -324,6 +324,3 @@ double sqr (double x)
 {
 	return x*x;
 }
-
-
-

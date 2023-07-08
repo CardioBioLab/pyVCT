@@ -8,7 +8,7 @@
 
 
 int cpmfem(
-	int NCX, int NCY, 
+	int NCX, int NCY,
 	double PART,
 	double VOXSIZE,
 	int NVX, int NVY,
@@ -38,7 +38,7 @@ int cpmfem(
 	int* cont_m,
 	int* fibr,
 	int* ctag_m
-	
+
 )
 {
 
@@ -55,7 +55,7 @@ int cpmfem(
 	double acceptance, acceptance_phi;
 	CONT = 0;
     CONT_INHIB = 1;
-	
+
 	if(!silence){
 		printf("SEED = %d\n",SEED);
 		printf("Sample size = %d x %d\n",NCX,NCY);
@@ -167,7 +167,7 @@ int cpmfem(
 	gettimeofday(&tv, NULL);
 	if(!silence)
 	printf("Took %lds\n", tv.tv_sec - time);
-	
+
 	//fill our outer massives//
 	int i,j,k;
 	for(i=0; i<NVX; i++) {
@@ -185,10 +185,9 @@ int cpmfem(
 
 	printf("\nmassives done!\n");
 
-	free(pv); 
+	free(pv);
 	free(pf);
 	free(CCAlabels);
-	
+
 	return 0;
 }
-

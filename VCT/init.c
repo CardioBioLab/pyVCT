@@ -11,7 +11,7 @@ int* alloc_attach(int NRc)
 
 	for(i=0;i<NRc+1;i++)
 		attached[i]=0;
-	
+
 	return attached;
 }
 
@@ -73,13 +73,13 @@ int init_cells(VOX* pv, int * types, BOX* pb, int NCX, int NCY, double PART, int
 					v = vx + i + (vy + j)*NVX;
 					if (v<NV){
 						pv[v].ctag = NRc;
-						pv[v].type = types[NRc]; 
+						pv[v].type = types[NRc];
 					}
 					else
 						printf("Cell out of area: (%d,%d)\n",vx+i-NVX,vy+j-NVY);
 				}
 			}
-		}	
+		}
 	}
 
 	return NRc;
@@ -89,7 +89,7 @@ int init_cells(VOX* pv, int * types, BOX* pb, int NCX, int NCY, double PART, int
 FIBERS* set_fibers(double distanceF, double VOXSIZE, int NVX, int NVY)
 {
 	FIBERS* pf;
-	
+
 	int v, vx, vy, vd, fd, kc;
 	int i;
 	double dx,dy;

@@ -21,7 +21,7 @@ neonatal_rat:
     MAX_FOCALS_FB: 9
     shifts: 1
     distanceF: 0.010
-  
+
   monolayer_without_fiber:
     GN_CM: 51.03
     TARGETVOLUME_CM: 140.8
@@ -44,16 +44,16 @@ neonatal_rat:
     MAX_FOCALS_FB: 13
     shifts: 1
     distanceF: 20.0
-  
+
   single_on_fiber:
     GN_CM: 238.22
     TARGETVOLUME_CM: 214.4
     INELASTICITY_CM: 69.88
-    DETACH_CM: 16.16       
+    DETACH_CM: 16.16
     GN_FB: 9.62
     TARGETVOLUME_FB: 148.8
     INELASTICITY_FB: 68.05
-    DETACH_FB: 15.20        
+    DETACH_FB: 15.20
     JCMMD: 1.185475
     JFBMD: 0.7645
     JCMCM: 25.0
@@ -62,12 +62,12 @@ neonatal_rat:
     UNLEASH_CM: 28.15
     UNLEASH_FB: 1.44
     LMAX_CM: 16.924
-    LMAX_FB: 19.488  
+    LMAX_FB: 19.488
     MAX_FOCALS_CM: 10
     MAX_FOCALS_FB: 22
     shifts: 0
     distanceF: 0.010
-  
+
   single_without_fiber:
     GN_CM: 47.48
     TARGETVOLUME_CM: 337.6

@@ -9,7 +9,7 @@ typedef int BOOL;
 //#define SEED 2
 int SEED;
 
-#define PI 3.14159265359 
+#define PI 3.14159265359
 
 #define rounder(a) (((a) + ((a) < 0 ? 0.5 : -0.5) < (int)(a))? (int)(a): (int)(a) + 1)
 
@@ -24,7 +24,7 @@ double sizeY;
 #define sizeMarginY 0.100 		// [mm] from one side
 #define MARGINX rounder(sizeMarginX/VOXSIZE)
 #define MARGINY rounder(sizeMarginY/VOXSIZE)
-int NVX; 
+int NVX;
 int NVY;
 #define NV  (NVX*NVY)
 //#define NRINC 901

@@ -41,5 +41,3 @@ unsigned mystrlen(const char *s)
 		++n;
 	return n;
 }
-
-

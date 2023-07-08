@@ -3,7 +3,7 @@
 #define EXAMPLES_H
 
 int cpmfem(
-	int NCX, int NCY, 
+	int NCX, int NCY,
 	double PART,
 	double VOXSIZE,
 	int NVX, int NVY,
