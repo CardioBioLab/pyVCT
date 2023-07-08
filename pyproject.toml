@@ -4,10 +4,11 @@ version = "0.1.0"
 description = ""
 authors = ["Alexey Kalinin <kalinin.ai@phystech.edu>"]
 readme = "README.md"
+packages = [{include = "VCT"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-numpy = "^1.24.3"
+numpy = "^1.25.0"
 
 
 [tool.poetry.group.dev.dependencies]
