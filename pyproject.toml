@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Alexey Kalinin <kalinin.ai@phystech.edu>"]
 readme = "README.md"
-packages = [{include = "VCT"}]
+packages = [{include = "pyVCT"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -13,6 +13,8 @@ numpy = "^1.25.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
+ipykernel = "^6.24.0"
+matplotlib = "^3.7.2"
 
 [build-system]
 requires = ["poetry-core"]
