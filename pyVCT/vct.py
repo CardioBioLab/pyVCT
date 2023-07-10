@@ -38,7 +38,8 @@ class VCT:
             Returns:
                 None
         """
-
+        # fixate random state
+        np.random.seed(seed)
         # cell and energy params
         if not path2params:
             path2params = os.path.dirname(__file__) + "/config" + "/params.yaml"
