@@ -65,21 +65,23 @@ def calcdH_CH(ctags, contacts, CMs, xt, yt, xs, ys, params):
     """
     Calculate dH for channel distribution
 
-        Params:
-            ctags: numpy 2D array, ctags[i][j] is id of cell with coordinates x=i and y=j
-            contacts: numpy 2D array, contacts[i][j] can be 0 or 1 and show is there a contact in voxel with x=i and y=j
-            CMs: numpy 2D array, CMs[i]=[xi,yi] contains coordinates of center of mass for cell with id=i
-            xt: int, x coordinate of target voxel
-            yt: int, y coordinate of target voxel
-            xs: int, x coordinate of source voxel
-            ys: int, y coordinate of source voxel
-            params: dict, contains all energy constants
+	    Params:
+		    ctags: numpy 2D array, ctags[i][j] is id of cell with coordinates x=i and y=j
+		    contacts: numpy 2D array, contacts[i][j] can be 0 or 1 and show is there a contact in voxel with x=i and y=j
+		    CMs: numpy 2D array, CMs[i]=[xi,yi] contains coordinates of center of mass for cell with id=i
+		    xt: int, x coordinate of target voxel
+		    yt: int, y coordinate of target voxel
+		    xs: int, x coordinate of source voxel
+		    ys: int, y coordinate of source voxel
+		    params: dict, contains all energy constants
 
-        Returns:
-            dH: float, difference in energy 
+	    Returns:
+		    dH: float, difference in energy 
     """
+    dHborder = 0
     dHborder = calcdHborder(ctags, contacts, xt, yt, params)
 
+    dHdist = 0
     dHdist = calcdHdist(ctags, contacts, CMs, xt, yt, xs, ys, params)
 
     dH = dHdist + dHborder
@@ -112,36 +114,36 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     """
     Calculate dH
 
-        Params:
-            ctags: numpy 2D array, ctags[i][j] is id of cell with coordinates x=i and y=j, ctags.shape = (NVX,NVY)
-            types: numpy 1D array, types[i] is a type of cell with id=i it can be 1 or 2, but types[0]=0 for non-cell type(medium), len(types)=(Number_of_cells+1)
-            fibers: numpy 2D array, fibers[i][j] can be 0 or 1 and show is there a fiber in voxel with x=i and y=j, fibers.shape = (NVX,NVY)
-            contacts: numpy 2D array, contacts[i][j] can be 0 or 1 and show is there a contact in voxel with x=i and y=j, contacts.shape = (NVX,NVY)
-            CMs: numpy 2D array, CMs[i]=[xi,yi] contains coordinates of center of mass for cell with id=i, len(CMs)=(Number_of_cells+1)
-            bond: numpy 3D array, bond[i][j]=[x,y] shows that voxel with coordinates i,j has connection with voxel at x,y place, bond.shape = (NVX,NVY,2)
-            csize: numpy 1D array, csize[i] contains size of cell with id=i, len(csize)=(Number_of_cells+1)
-            xt: int, x coordinate of target voxel
-            yt: int, y coordinate of target voxel
-            xs: int, x coordinate of source voxel
-            ys: int, y coordinate of source voxel
-            params: dict, dictionary with following energy parameters
-                        TARGETVOLUME_CM, TARGETVOLUME_FB,
-                        INELASTICITY_CM, INELASTICITY_FB,
-                        GN_CM, GN_FB,
-                        DETACH_CM, DETACH_FB,
-                        UNLEASH_CM, UNLEASH_FB,
-                        LMAX_CM, LMAX_FB,
-                        JCMCM, JFBCM, JFBFB, JCMMD, JFBMD,
-                        JH,
-                        JB,
-                        G_NCH,
-                        E_bond,
-                        F_ANGLE,
-                        NUCLEI_R,
-                        NUCL
+	    Params:
+		    ctags: numpy 2D array, ctags[i][j] is id of cell with coordinates x=i and y=j, ctags.shape = (NVX,NVY)
+		    types: numpy 1D array, types[i] is a type of cell with id=i it can be 1 or 2, but types[0]=0 for non-cell type(medium), len(types)=(Number_of_cells+1)
+		    fibers: numpy 2D array, fibers[i][j] can be 0 or 1 and show is there a fiber in voxel with x=i and y=j, fibers.shape = (NVX,NVY)
+		    contacts: numpy 2D array, contacts[i][j] can be 0 or 1 and show is there a contact in voxel with x=i and y=j, contacts.shape = (NVX,NVY)
+		    CMs: numpy 2D array, CMs[i]=[xi,yi] contains coordinates of center of mass for cell with id=i, len(CMs)=(Number_of_cells+1)
+		    bond: numpy 3D array, bond[i][j]=[x,y] shows that voxel with coordinates i,j has connection with voxel at x,y place, bond.shape = (NVX,NVY,2)
+		    csize: numpy 1D array, csize[i] contains size of cell with id=i, len(csize)=(Number_of_cells+1)
+		    xt: int, x coordinate of target voxel
+		    yt: int, y coordinate of target voxel
+		    xs: int, x coordinate of source voxel
+		    ys: int, y coordinate of source voxel
+		    params: dict, dictionary with following energy parameters
+    				TARGETVOLUME_CM, TARGETVOLUME_FB,
+    				INELASTICITY_CM, INELASTICITY_FB,
+    				GN_CM, GN_FB,
+    				DETACH_CM, DETACH_FB,
+    				UNLEASH_CM, UNLEASH_FB,
+    				LMAX_CM, LMAX_FB,
+    				JCMCM, JFBCM, JFBFB, JCMMD, JFBMD,
+    				JH,
+    				JB,
+    				G_NCH,
+    				E_bond,
+    				F_ANGLE,
+    				NUCLEI_R,
+    				NUCL
 
-        Returns:
-            dH: float, difference in energy 
+	    Returns:
+		    dH: float, difference in energy 
     """
     
     dH = 0
@@ -234,7 +236,8 @@ def contactenergy(tag1, tag2, type1, type2, params):
     return J
 
 def calcdHvol(csize, ttag, stag, ttype, stype, params):
-    
+    dHvolA = 0
+    dHvolB = 0
     if ttag:
         V0 = params[TARGETVOLUME(ttype)]
         V = csize[ttag-1]
@@ -253,6 +256,8 @@ def calcdHvol(csize, ttag, stag, ttype, stype, params):
 
 def calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, Qt, Qs, params):
     dH = 0
+    coss = 1
+    cost = 1
     stag = ctags[xs][ys]
     ttag = ctags[xt][yt]
 
