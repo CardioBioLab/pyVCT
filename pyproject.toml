@@ -2,7 +2,7 @@
 name = "pyvct"
 version = "0.1.0"
 description = ""
-authors = ["Alexey Kalinin <kalinin.ai@phystech.edu>"]
+authors = ["Alexey Kalinin <kalinin.ai@phystech.edu>", "Vadim Naumov <naumov.vd@phystech.edu>"]
 readme = "README.md"
 packages = [{include = "pyVCT"}]
 
