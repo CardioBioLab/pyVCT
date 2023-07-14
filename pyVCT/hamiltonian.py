@@ -19,8 +19,6 @@ params: dictionary with following energy parameters
     F_ANGLE,
     NUCLEI_R,
     NUCL
-
-
 '''
 import numpy as np
 
@@ -78,8 +76,10 @@ def calcdH_CH(ctags, contacts, CMs, xt, yt, xs, ys, params):
         Returns:
             dH: float, difference in energy 
     """
+    dHborder = 0
     dHborder = calcdHborder(ctags, contacts, xt, yt, params)
 
+    dHdist = 0
     dHdist = calcdHdist(ctags, contacts, CMs, xt, yt, xs, ys, params)
 
     dH = dHdist + dHborder
@@ -147,23 +147,23 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     dH = 0
     dHcontact = 0
     dHvol = 0
-    dHfocals = 0
-    dHsyncytium = 0
-    dHnuclei = 0
+    # dHfocals = 0
+    # dHsyncytium = 0
+    # dHnuclei = 0
     
     
     dHcontact = calcdHcontact(ctags, types, xt, yt, xs, ys, params)
     
     dHvol = calcdHvol(csize, ctags[xt][yt], ctags[xs][ys], types[ctags[xt][yt]], types[ctags[xs][ys]], params)
     
-    dHfocals = calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, fibers[xt][yt], fibers[xs][ys], params)
+    # dHfocals = calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, fibers[xt][yt], fibers[xs][ys], params)
     
-    if params['E_bond']:
-        dHsyncytium = calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params)
+    # if params['E_bond']:
+    #     dHsyncytium = calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params)
     
-    dHnuclei = calcdHnuclei(ctags, types, CMs, xt, yt, params)
+    # dHnuclei = calcdHnuclei(ctags, types, CMs, xt, yt, params)
     
-    dH = dHcontact + dHvol + dHfocals + dHsyncytium + dHnuclei
+    dH = dHcontact + dHvol #+ dHfocals + dHsyncytium + dHnuclei
     
     return dH
 
@@ -234,7 +234,8 @@ def contactenergy(tag1, tag2, type1, type2, params):
     return J
 
 def calcdHvol(csize, ttag, stag, ttype, stype, params):
-    
+    dHvolA = 0
+    dHvolB = 0
     if ttag:
         V0 = params[TARGETVOLUME(ttype)]
         V = csize[ttag-1]
@@ -253,6 +254,8 @@ def calcdHvol(csize, ttag, stag, ttype, stype, params):
 
 def calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, Qt, Qs, params):
     dH = 0
+    coss = 1
+    cost = 1
     stag = ctags[xs][ys]
     ttag = ctags[xt][yt]
 

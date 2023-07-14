@@ -9,6 +9,7 @@ packages = [{include = "pyVCT"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 numpy = "^1.25.0"
+tqdm = "^4.65.0"
 
 
 [tool.poetry.group.dev.dependencies]

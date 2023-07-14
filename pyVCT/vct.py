@@ -1,9 +1,12 @@
 import os
 
 import numpy as np
+from tqdm import tqdm
 
 from pyVCT.utils import parse_config
 from pyVCT.hamiltonian import calcdH
+
+import matplotlib.pyplot as plt
 
 
 class VCT:
@@ -38,8 +41,10 @@ class VCT:
             Returns:
                 None
         """
+        
         # fixate random state
         np.random.seed(seed)
+        
         # cell and energy params
         if not path2params:
             path2params = os.path.dirname(__file__) + "/config" + "/params.yaml"
@@ -56,8 +61,11 @@ class VCT:
 
         self.part = part
 
+        self.moves = 0
+
         self._init_constants()
         self._init_cells()
+        self._init_fibers()
 
     def _init_constants(self):
         '''
@@ -78,9 +86,10 @@ class VCT:
         # create arrays for simulation
         self.ctags = np.zeros((self.nvx, self.nvy), dtype=int)
         self.types = np.zeros((self.ncx * self.ncy + 1), dtype=int)
+        self.cell_sizes = np.ones((self.ncx * self.ncy + 1)) * self.startvolume
         self.contacts = np.zeros((self.nvx, self.nvy))
         self.bonds = np.zeros((self.nvx, self.nvy))
-        self.mass_centers = np.zeros((self.ncx * self.ncy + 1, 2))
+        self.mass_centers = np.ones((self.ncx * self.ncy + 1, 2)) 
 
         dx = (self.nvx - 2 * self.marginx) / self.ncx
         dy = (self.nvy - 2 * self.marginy) / self.ncy
@@ -105,22 +114,77 @@ class VCT:
                 self.types[cell_number] = type
                 self.mass_centers[cell_number] = [x, y]
                 
+    def _init_fibers(self):
+        self.fibers = np.array((self.nvx, self.nvy))
+        # TODO add fibers initializatin in case of '__on_fibers'
+                
     def step(self):
         '''
+        Makes 1 simulation step
+        '''
+        for _ in range(self.nvx * self.nvy):
+            # pick random grid element
+            
+            x_target = np.random.randint(0, 2**32 - 1) % (self.nvx - self.marginx) + self.marginx // 2
+            y_target = np.random.randint(0, 2**32 - 1) % (self.nvy - self.marginy) + self.marginy // 2
+            
+            x_source = x_target + np.random.randint(0, 2**32 - 1) % 3 - 1 
+            y_source = y_target + np.random.randint(0, 2**32 - 1) % 3 - 1
+            
+            # check if source and target id different
+            if self.ctags[x_source, y_source] == self.ctags[x_target, y_target]:
+                continue
+            
+            dH = calcdH(
+                self.ctags, 
+                self.types,
+                self.fibers,
+                self.contacts, 
+                self.mass_centers,
+                self.bonds,
+                self.cell_sizes,
+                x_target, y_target,
+                x_source, y_source,
+                self.energy_config
+            )
+            
+            proba = np.exp(-dH) if dH > 0 else 1
+            
+            if np.random.binomial(1, proba) > 0:
+                self.move(x_target, y_target, x_source, y_source)
+        
+    def move(self, x_target, y_target, x_source, y_source):
+        '''
+        Move cell target voxel to source voxel 
         '''
         
-        # pick random grid element
-        x = np.random.randint(0, 2**32 - 1) % self.nvx
-        y = np.random.randint(0, 2**32 - 1) % self.nvx
+        self.moves += 1
         
-        x_niegbour = np.random.randint(0, 2**32 - 1) % 8
-        y_niegbour = np.random.randint(0, 2**32 - 1) % 8
+        ttag = self.ctags[x_target, y_target]
+        stag = self.ctags[x_source, y_source]
         
-         
-        return
+        self.ctags[x_source, y_source] = ttag
+        self.cell_sizes[ttag] += 1
+        
+    def draw(self):
+        isCM = np.vectorize(lambda x : self.types[x] == 1)
+        isFB = np.vectorize(lambda x : self.types[x] == 2)
+        
+        CMs = isCM(self.ctags)
+        FBs = isFB(self.ctags)
+        
+        img = np.zeros(CMs.shape + (3,))
+        img[:, :, 0] = CMs * 255
+
+        img[:, :, 2] = FBs * 255
+
+        plt.imshow(img)
+        
+        
         
         
 
 
 if __name__ == "__main__":
     vct = VCT()
+    vct.step()
