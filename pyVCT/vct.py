@@ -7,7 +7,6 @@ from tqdm import tqdm
 from pyVCT.hamiltonian import calcdH
 from pyVCT.utils import parse_config
 
-
 class VCT:
     def __init__(
         self,
@@ -85,7 +84,7 @@ class VCT:
         # create arrays for simulation
         self.ctags = np.zeros((self.nvx, self.nvy), dtype=int)
         self.types = np.zeros((self.ncx * self.ncy + 1), dtype=int)
-        self.cell_sizes = np.ones((self.ncx * self.ncy + 1)) * self.startvolume
+        self.cell_sizes = np.ones((self.ncx * self.ncy + 1), dtype=int) * (2 * self.r + 1)**2
         self.contacts = np.zeros((self.nvx, self.nvy))
         self.bonds = np.zeros((self.nvx, self.nvy))
         self.mass_centers = np.ones((self.ncx * self.ncy + 1, 2))
@@ -108,7 +107,7 @@ class VCT:
 
                 type = np.random.binomial(1, self.part) + 1
 
-                self.ctags[x - self.r : x + self.r, y - self.r : y + self.r] = cell_number
+                self.ctags[x - self.r : x + self.r + 1, y - self.r : y + self.r + 1] = cell_number
                 self.types[cell_number] = type
                 self.mass_centers[cell_number] = [x, y]
 
@@ -121,8 +120,8 @@ class VCT:
         Makes 1 simulation step
         """
         for _ in range(self.nvx * self.nvy):
-            # pick random grid element
-
+            
+            # pick random voxel
             x_target = (
                 np.random.randint(0, 2**32 - 1) % (self.nvx - self.marginx)
                 + self.marginx // 2
@@ -132,15 +131,16 @@ class VCT:
                 + self.marginy // 2
             )
 
+            # pick random neigbour
             x_source = x_target + np.random.randint(0, 2**32 - 1) % 3 - 1
             y_source = y_target + np.random.randint(0, 2**32 - 1) % 3 - 1
 
-            # check if source and target id different
+            # check if source and target id are the same -> skip step
             if self.ctags[x_source, y_source] == self.ctags[x_target, y_target]:
                 continue
-
-            # if cell volume may become zero skip step
-            if self.cell_sizes[self.ctags[x_source, y_source]] <= 1:
+            
+            # if cell volume may become zero -> skip step
+            if self.cell_sizes[self.ctags[x_target, y_target]] <= 1:
                 continue
 
             dH = calcdH(
@@ -159,23 +159,39 @@ class VCT:
             )
 
             proba = np.exp(-dH) if dH > 0 else 1
-
+            
             if np.random.binomial(1, proba) > 0:
                 self.move(x_target, y_target, x_source, y_source)
 
     def move(self, x_target, y_target, x_source, y_source):
         """
-        Move cell target voxel to source voxel
+        Move source voxel to target voxel
         """
-
         self.moves += 1
 
         ttag = self.ctags[x_target, y_target]
         stag = self.ctags[x_source, y_source]
 
-        self.ctags[x_source, y_source] = ttag
-        self.cell_sizes[ttag] += 1
-        self.cell_sizes[stag] -= 1
+        self.ctags[x_target, y_target] = stag
+        if ttag != 0:
+            self.cell_sizes[ttag] -= 1
+        if stag != 0:
+            self.cell_sizes[stag] += 1
+            
+        self.update_mass_centers()
+        
+    def update_mass_centers(self, tag):
+        '''
+        Update mass center for one cell
+        '''
+        
+        idxs = np.argwhere(self.ctags == tag)
+        x_center = idxs[:, 0].mean()
+        y_center = idxs[:, 1].mean()
+        self.mass_centers[tag] = [x_center, y_center]
+        
+        return x_center, y_center, idxs
+        
 
     def draw(self):
         isCM = np.vectorize(lambda x: self.types[x] == 1)

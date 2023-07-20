@@ -21,6 +21,7 @@ params: dictionary with following energy parameters
     NUCL
 '''
 import numpy as np
+import logging
 
 def TARGETVOLUME(a):
     if a == 1:
@@ -164,7 +165,6 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     # dHnuclei = calcdHnuclei(ctags, types, CMs, xt, yt, params)
     
     dH = dHcontact + dHvol #+ dHfocals + dHsyncytium + dHnuclei
-    
     return dH
 
 def calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params):
@@ -238,18 +238,17 @@ def calcdHvol(csize, ttag, stag, ttype, stype, params):
     dHvolB = 0
     if ttag:
         V0 = params[TARGETVOLUME(ttype)]
-        V = csize[ttag-1]
+        V = csize[ttag]
         eV = (V-V0)/V0
         eVn = (V-1-V0)/V0
         dHvolA = params[INELASTICITY(ttype)]*(eVn*eVn-eV*eV)
     if stag:
         V0 = params[TARGETVOLUME(stype)]
-        V = csize[stag-1]
+        V = csize[stag]
         eV = (V-V0)/V0
         eVn = (V+1-V0)/V0
         dHvolB = params[INELASTICITY(stype)]*(eVn*eVn-eV*eV)
     dHvol = dHvolA + dHvolB
-
     return dHvol
 
 def calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, Qt, Qs, params):
