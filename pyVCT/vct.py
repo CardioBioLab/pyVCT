@@ -178,7 +178,8 @@ class VCT:
         if stag != 0:
             self.cell_sizes[stag] += 1
             
-        self.update_mass_centers()
+        self.update_mass_centers(ttag)
+        self.update_mass_centers(stag)
         
     def update_mass_centers(self, tag):
         '''
