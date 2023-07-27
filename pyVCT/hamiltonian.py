@@ -162,9 +162,9 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     # if params['E_bond']:
     #     dHsyncytium = calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params)
     
-    # dHnuclei = calcdHnuclei(ctags, types, CMs, xt, yt, params)
+    dHnuclei = calcdHnuclei(ctags, types, CMs, xt, yt, params)
     
-    dH = dHcontact + dHvol #+ dHfocals + dHsyncytium + dHnuclei
+    dH = dHcontact + dHvol + dHnuclei #+ dHfocals + dHsyncytium + dHnuclei
     return dH
 
 def calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params):

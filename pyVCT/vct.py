@@ -62,6 +62,7 @@ class VCT:
         self.moves = 0
 
         self._init_constants()
+        self._cast_units()
         self._init_cells()
         self._init_fibers()
 
@@ -78,6 +79,9 @@ class VCT:
         self.marginx, self.marginy = int(self.sizeX / 10 / self.voxsize), int(self.sizeY / 10 / self.voxsize)
         self.nvx = int(self.sizeX / self.voxsize) + self.marginx
         self.nvy = int(self.sizeY / self.voxsize) + self.marginy
+        
+    def _cast_units(self):
+        self.energy_config['NUCLEI_R'] =  self.energy_config['NUCLEI_R'] / self.voxsize
 
     def _init_cells(self):
 
@@ -173,9 +177,11 @@ class VCT:
         stag = self.ctags[x_source, y_source]
 
         self.ctags[x_target, y_target] = stag
+        
         if ttag != 0:
             self.cell_sizes[ttag] -= 1
             self.update_mass_centers(ttag)
+           
         if stag != 0:
             self.cell_sizes[stag] += 1
             self.update_mass_centers(stag)
