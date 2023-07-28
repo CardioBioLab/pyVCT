@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-from pyVCT.hamiltonian import calcdH
+from pyVCT.hamiltonian import calcdH, MAX_FOCALS
 from pyVCT.utils import parse_config
 
 class VCT:
@@ -86,12 +86,21 @@ class VCT:
     def _init_cells(self):
 
         # create arrays for simulation
-        self.ctags = np.zeros((self.nvx, self.nvy), dtype=int)
-        self.types = np.zeros((self.ncx * self.ncy + 1), dtype=int)
-        self.cell_sizes = np.ones((self.ncx * self.ncy + 1), dtype=int) * (2 * self.r + 1)**2
+        # cell tag at every voxel
+        self.ctags = np.zeros((self.nvx, self.nvy), dtype=int) 
+        # mark if there is contact with surface at voxel
         self.contacts = np.zeros((self.nvx, self.nvy))
-        self.bonds = np.zeros((self.nvx, self.nvy))
+        
+        # cell type for every cell tag
+        self.types = np.zeros((self.ncx * self.ncy + 1), dtype=int)
+        # cell size for every cell tag
+        self.cell_sizes = np.ones((self.ncx * self.ncy + 1), dtype=int) * (2 * self.r + 1)**2
+        # number contacts with surface for every cell tag
+        self.attached = np.zeros((self.ncx * self.ncy + 1), dtype=int)
+        # mass centers for every cell tag
         self.mass_centers = np.ones((self.ncx * self.ncy + 1, 2))
+        
+        self.bonds = np.zeros((self.nvx, self.nvy))
 
         dx = (self.nvx - 2 * self.marginx) / self.ncx
         dy = (self.nvy - 2 * self.marginy) / self.ncy
@@ -116,7 +125,8 @@ class VCT:
                 self.mass_centers[cell_number] = [x, y]
 
     def _init_fibers(self):
-        self.fibers = np.array((self.nvx, self.nvy))
+        self.fibers = np.zeros((self.nvx, self.nvy))
+        print(self.fibers.shape)
         # TODO add fibers initializatin in case of '__on_fibers'
 
     def step(self):
@@ -139,7 +149,7 @@ class VCT:
             x_source = x_target + np.random.randint(0, 2**32 - 1) % 3 - 1
             y_source = y_target + np.random.randint(0, 2**32 - 1) % 3 - 1
 
-            # check if source and target id are the same -> skip step
+            #  if source and target id are the same -> skip step
             if self.ctags[x_source, y_source] == self.ctags[x_target, y_target]:
                 continue
             
@@ -176,8 +186,10 @@ class VCT:
         ttag = self.ctags[x_target, y_target]
         stag = self.ctags[x_source, y_source]
 
+        # update cell tags
         self.ctags[x_target, y_target] = stag
         
+        # update mass centers and cell sizes
         if ttag != 0:
             self.cell_sizes[ttag] -= 1
             self.update_mass_centers(ttag)
@@ -185,6 +197,21 @@ class VCT:
         if stag != 0:
             self.cell_sizes[stag] += 1
             self.update_mass_centers(stag)
+            
+        # update contacts and attached
+        # move contact value from source to target
+        if self.contacts[x_target, y_target]:
+            self.attached[ttag] -= 1
+        self.contacts[x_target, y_target] = self.contacts[x_source, y_source]
+        self.contacts[x_source, y_source] = 0
+
+        # if there are few contact in source cell add new contact to occupied voxel
+        if stag and (not self.contacts[x_target, y_target]) and self.attached[stag] < self.energy_config[MAX_FOCALS(self.types[stag])]:
+            self.contacts[x_target, y_target] = 1
+            self.attached[stag] += 1 
+            
+
+
         
         
     def update_mass_centers(self, tag):
@@ -197,7 +224,7 @@ class VCT:
         y_center = idxs[:, 1].mean()
         self.mass_centers[tag] = [x_center, y_center]
         
-        return x_center, y_center, idxs
+        return x_center, y_center
         
 
     def draw(self):

@@ -58,6 +58,12 @@ def LMAX(a):
         return 'LMAX_CM'
     else:
         return 'LMAX_FB'
+    
+def MAX_FOCALS(a):
+    if a == 1:
+        return 'MAX_FOCALS_CM'
+    else:
+        return 'MAX_FOCALS_FB'
 
 
 def calcdH_CH(ctags, contacts, CMs, xt, yt, xs, ys, params):
@@ -148,16 +154,16 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     dH = 0
     dHcontact = 0
     dHvol = 0
-    # dHfocals = 0
+    dHfocals = 0
     # dHsyncytium = 0
-    # dHnuclei = 0
+    dHnuclei = 0
     
     
     dHcontact = calcdHcontact(ctags, types, xt, yt, xs, ys, params)
     
     dHvol = calcdHvol(csize, ctags[xt][yt], ctags[xs][ys], types[ctags[xt][yt]], types[ctags[xs][ys]], params)
     
-    # dHfocals = calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, fibers[xt][yt], fibers[xs][ys], params)
+    dHfocals = calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, fibers[xt][yt], fibers[xs][ys], params)
     
     # if params['E_bond']:
     #     dHsyncytium = calcdHsyncytium(ctags, CMs, bond, xt, yt, xs, ys, params)
