@@ -100,7 +100,7 @@ class VCT:
         # mass centers for every cell tag
         self.mass_centers = np.ones((self.ncx * self.ncy + 1, 2))
         
-        self.bonds = np.zeros((self.nvx, self.nvy))
+        self.bonds = np.zeros((self.nvx, self.nvy, 2))
 
         dx = (self.nvx - 2 * self.marginx) / self.ncx
         dy = (self.nvy - 2 * self.marginy) / self.ncy
@@ -148,15 +148,27 @@ class VCT:
             # pick random neigbour
             x_source = x_target + np.random.randint(0, 2**32 - 1) % 3 - 1
             y_source = y_target + np.random.randint(0, 2**32 - 1) % 3 - 1
+            
+            
+            ttag = self.ctags[x_target, y_target]
+            stag = self.ctags[x_source, y_source]
 
             #  if source and target id are the same -> skip step
-            if self.ctags[x_source, y_source] == self.ctags[x_target, y_target]:
+            if ttag == stag:
                 continue
             
             # if cell volume may become zero -> skip step
-            if self.cell_sizes[self.ctags[x_target, y_target]] <= 1:
+            if self.cell_sizes[ttag] <= 1:
                 continue
-
+            
+            #if there was no bond before and it is needed create it
+            if self.types[ttag] * self.types[stag] == 1 \
+                and self.contacts[ttag] * self.contacts[stag] == 1 \
+                and self.bonds[x_target, y_target].sum()!= 0 \
+                and self.bonds[x_source, y_source].sum()!= 0:
+                    self.bonds[x_target, y_target] = [x_source, y_source]
+                    self.bonds[x_source, y_source] = [x_target, y_target]
+                    
             dH = calcdH(
                 self.ctags,
                 self.types,
@@ -209,11 +221,17 @@ class VCT:
         if stag and (not self.contacts[x_target, y_target]) and self.attached[stag] < self.energy_config[MAX_FOCALS(self.types[stag])]:
             self.contacts[x_target, y_target] = 1
             self.attached[stag] += 1 
-            
-
-
         
+        # Update bonds  
+        if self.bonds[x_source, y_source].sum() != 0:
+            self.bonds[self.bonds[x_source, y_source]] = [0, 0]
+            self.bonds[x_source, y_source] = [0, 0]
         
+        if self.bonds[x_target, y_target].sum() != 0:
+            self.bonds[self.bonds[x_target, y_target]] = [0, 0]
+            self.bonds[x_target, y_target] = [0, 0]
+        
+ 
     def update_mass_centers(self, tag):
         '''
         Update mass center for one cell

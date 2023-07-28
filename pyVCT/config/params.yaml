@@ -2,11 +2,11 @@ neonatal_rat:
   monolayer_on_fiber:
     GN_CM: 461.36
     TARGETVOLUME_CM: 96
-    INELASTICITY_CM: 300
+    INELASTICITY_CM: 26.42
     DETACH_CM: 155.62
     GN_FB: 233.76
     TARGETVOLUME_FB: 56
-    INELASTICITY_FB: 250
+    INELASTICITY_FB: 14.24
     DETACH_FB: 53.21
     JCMMD: 2.342825
     JFBMD: 1.400675
@@ -23,6 +23,7 @@ neonatal_rat:
     distanceF: 0.010
     NUCL: 2.0
     NUCLEI_R: 0.07 #[mm]
+    E_bond: 0.0
 
 
   monolayer_without_fiber:
@@ -49,6 +50,7 @@ neonatal_rat:
     distanceF: 20.0
     NUCL: 2.0
     NUCLEI_R: 0.07 #[mm]
+    E_bond: 0.0
 
   single_on_fiber:
     GN_CM: 238.22
@@ -74,6 +76,7 @@ neonatal_rat:
     distanceF: 0.010
     NUCL: 2.0
     NUCLEI_R: 0.07 #[mm]
+    E_bond: 0.0
 
 
   single_without_fiber:
@@ -100,4 +103,5 @@ neonatal_rat:
     distanceF: 20.0
     NUCL: 2.0
     NUCLEI_R: 0.07 #[mm]
+    E_bond: 0.0
 
