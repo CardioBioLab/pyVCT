@@ -81,7 +81,23 @@ class VCT:
         self.nvy = int(self.sizeY / self.voxsize) + self.marginy
         
     def _cast_units(self):
+        scale = self.voxsize / 0.0025
         self.energy_config['NUCLEI_R'] =  self.energy_config['NUCLEI_R'] / self.voxsize
+        self.energy_config['GN_CM'] = self.energy_config['GN_CM'] / scale
+        self.energy_config['GN_FB'] = self.energy_config['GN_FB'] / scale
+        self.energy_config['TARGETVOLUME_CM'] = self.energy_config['TARGETVOLUME_CM'] / 1000 / self.voxsize / self.voxsize
+        self.energy_config['TARGETVOLUME_FB'] = self.energy_config['TARGETVOLUME_FB'] / 1000 / self.voxsize / self.voxsize
+        self.energy_config['INELASTICITY_CM'] = self.energy_config['INELASTICITY_CM'] * (scale**4)
+        self.energy_config['INELASTICITY_FB'] = self.energy_config['INELASTICITY_FB'] * (scale**4)
+        self.energy_config['JCMMD'] = self.energy_config['JCMMD'] * self.voxsize
+        self.energy_config['JFBMD'] = self.energy_config['JFBMD'] * self.voxsize
+        self.energy_config['JCMCM'] = self.energy_config['JCMCM'] * self.voxsize
+        self.energy_config['JFBFB'] = self.energy_config['JFBFB'] * self.voxsize
+        self.energy_config['JFBCM'] = self.energy_config['JFBCM'] * self.voxsize
+        self.energy_config['LMAX_CM'] = self.energy_config['LMAX_CM'] / 1000 / self.voxsize
+        self.energy_config['LMAX_FB'] = self.energy_config['LMAX_FB'] / 1000 / self.voxsize
+        
+
 
     def _init_cells(self):
 
