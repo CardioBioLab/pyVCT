@@ -17,9 +17,11 @@ class VCT:
         ncx: int = 10,
         ncy: int = 10,
         part: float = 0.5,
+        fibers = False,
         seed: int = 42,
         path2params: str = None,
-        voxsize=0.0025,
+        voxsize: float = 0.0025,
+        fibers_dist: float = 0.1,
     ) -> None:
         """
         Initiliaze Virual Cardiac Monolayer class
@@ -34,7 +36,8 @@ class VCT:
                 part: float, % of fibroblasts in monolayear between 0 and 1
                 seed: int, random seed for numpy generators
                 energy_config: dict, config with energy params
-                voxsize:  size of voxels [mm]
+                voxsize: float, size of voxels [mm]
+                fibers_dist: float, distance between fibers [mm] 
 
             Returns:
                 None
@@ -57,6 +60,7 @@ class VCT:
         self.ncx = ncx
         self.ncy = ncy
 
+        # init partition
         self.part = part
 
         self.moves = 0
@@ -64,7 +68,7 @@ class VCT:
         self._init_constants()
         self._cast_units()
         self._init_cells()
-        self._init_fibers()
+        self._init_fibers(fibers)
 
     def _init_constants(self):
         """
@@ -80,8 +84,13 @@ class VCT:
         self.nvx = int(self.sizeX / self.voxsize) + self.marginx
         self.nvy = int(self.sizeY / self.voxsize) + self.marginy
         
+        # constans for fibers
+        self.fibers_distance = int(0.1 / self.voxsize)
+        
+               
     def _cast_units(self):
         self.energy_config['NUCLEI_R'] =  self.energy_config['NUCLEI_R'] / self.voxsize
+        self.energy_config['F_ANGLE'] = 0
 
     def _init_cells(self):
 
@@ -105,7 +114,7 @@ class VCT:
         dx = (self.nvx - 2 * self.marginx) / self.ncx
         dy = (self.nvy - 2 * self.marginy) / self.ncy
 
-        assert dx > 2 * self.r and dy > 2 * self.r, "Too dense"
+        assert dx > 2 * self.r and dy > 2 * self.r, "Too dense, please decrease number of cells"
 
         cell_number = 0
         for i in range(self.ncx):
@@ -124,11 +133,15 @@ class VCT:
                 self.types[cell_number] = type
                 self.mass_centers[cell_number] = [x, y]
 
-    def _init_fibers(self):
+    def _init_fibers(self, fibers):
         self.fibers = np.zeros((self.nvx, self.nvy))
-        print(self.fibers.shape)
-        # TODO add fibers initializatin in case of '__on_fibers'
+        if not fibers:
+            return 
+        else:
+            for i in range(self.fibers_distance, self.nvx, self.fibers_distance):
+                self.fibers[i] = 1
 
+        
     def step(self):
         """
         Makes 1 simulation step
@@ -254,8 +267,8 @@ class VCT:
 
         img = np.zeros(CMs.shape + (3,))
         img[:, :, 0] = CMs * 255
-
         img[:, :, 2] = FBs * 255
+        img[:, :, 1] = self.fibers * 255
 
         plt.imshow(img)
 

@@ -21,7 +21,6 @@ params: dictionary with following energy parameters
     NUCL
 '''
 import numpy as np
-import logging
 
 def TARGETVOLUME(a):
     if a == 1:
@@ -266,10 +265,10 @@ def calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, Qt, Qs, params):
 
     if Qs and Qt:
         
-        coss = np.cos(params['F_ANGLE'] - np.atan((ys - CMs[stag][1]) / (xs - CMs[stag][0])))
+        coss = np.cos(params['F_ANGLE'] - np.arctan((ys - CMs[stag][1]) / (xs - CMs[stag][0])))
         
         
-        cost = np.cos(params['F_ANGLE'] - np.atan((yt - CMs[ttag][1]) / (xt - CMs[stag][0])))
+        cost = np.cos(params['F_ANGLE'] - np.arctan((yt - CMs[ttag][1]) / (xt - CMs[stag][0])))
 
     if contacts[xs][ys]:
         distt = dist(CMs, xt, yt, ttag)
