@@ -23,7 +23,7 @@ neonatal_rat:
     distanceF: 0.010
     NUCL: 2.0
     NUCLEI_R: 0.07 #[mm]
-    E_bond: 0.0
+    E_bond: 5.0
 
 
   monolayer_without_fiber:
