@@ -16,7 +16,6 @@ params: dictionary with following energy parameters
     JB,
     G_NCH,
     E_bond,
-    F_ANGLE,
     NUCLEI_R,
     NUCL
 '''
@@ -142,7 +141,6 @@ def calcdH(ctags, types, fibers, contacts, CMs, bond, csize, xt, yt, xs, ys, par
     				JB,
     				G_NCH,
     				E_bond,
-    				F_ANGLE,
     				NUCLEI_R,
     				NUCL
 
@@ -265,10 +263,10 @@ def calcdHprotrude(ctags, types, contacts, CMs, xt, yt, xs, ys, Qt, Qs, params):
 
     if Qs and Qt:
         
-        coss = np.cos(params['F_ANGLE'] - np.arctan((ys - CMs[stag][1]) / (xs - CMs[stag][0])))
+        coss = np.cos(-np.atan((ys - CMs[stag][1]) / (xs - CMs[stag][0])))
         
         
-        cost = np.cos(params['F_ANGLE'] - np.arctan((yt - CMs[ttag][1]) / (xt - CMs[stag][0])))
+        cost = np.cos(-np.atan((yt - CMs[stag][1]) / (xt - CMs[stag][0])))
 
     if contacts[xs][ys]:
         distt = dist(CMs, xt, yt, ttag)
