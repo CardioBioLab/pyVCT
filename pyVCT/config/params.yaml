@@ -1,107 +1,105 @@
 neonatal_rat:
-  monolayer_on_fiber:
-    GN_CM: 461.36
-    TARGETVOLUME_CM: 0.6
-    INELASTICITY_CM: 26.42
-    DETACH_CM: 155.62
-    GN_FB: 233.76
-    TARGETVOLUME_FB: 0.35
-    INELASTICITY_FB: 14.24
-    DETACH_FB: 53.21
-    JCMMD: 937.13
-    JFBMD: 560.27
-    JCMCM: 631.42
-    JFBFB: 267.25
-    JFBCM: 1152.05
-    UNLEASH_CM: 117.94
-    UNLEASH_FB: 66.93
-    LMAX_CM: 62.37
-    LMAX_FB: 65.05
-    MAX_FOCALS_CM: 8
-    MAX_FOCALS_FB: 9
-    shifts: 1
-    distanceF: 0.010
-    NUCL: 2.0
-    NUCLEI_R: 0.07 #[mm]
-    E_bond: 5.0
+  monolayer:
+    fiber:
+      GN_CM: 461.36
+      TARGETVOLUME_CM: 0.6
+      INELASTICITY_CM: 26.42
+      DETACH_CM: 155.62
+      GN_FB: 233.76
+      TARGETVOLUME_FB: 0.35
+      INELASTICITY_FB: 14.24
+      DETACH_FB: 53.21
+      JCMMD: 937.13
+      JFBMD: 560.27
+      JCMCM: 631.42
+      JFBFB: 267.25
+      JFBCM: 1152.05
+      UNLEASH_CM: 117.94
+      UNLEASH_FB: 66.93
+      LMAX_CM: 62.37
+      LMAX_FB: 65.05
+      MAX_FOCALS_CM: 8
+      MAX_FOCALS_FB: 9
+      shifts: 1
+      NUCL: 2.0
+      NUCLEI_R: 0.007 #[mm]
+      E_bond: 5.0
 
 
-  monolayer_without_fiber:
-    GN_CM: 51.03
-    TARGETVOLUME_CM: 0.88
-    INELASTICITY_CM: 62.32
-    DETACH_CM: 30.93
-    GN_FB: 5.09
-    TARGETVOLUME_FB: 0.79
-    INELASTICITY_FB: 17.91
-    DETACH_FB: 11.22
-    JCMMD: 1013.93
-    JFBMD: 445.77
-    JCMCM: 798.73
-    JFBFB: 473.28
-    JFBCM: 949.22
-    UNLEASH_CM: 0.0
-    UNLEASH_FB: 0.0
-    LMAX_CM: 81.41
-    LMAX_FB: 73.62
-    MAX_FOCALS_CM: 12
-    MAX_FOCALS_FB: 13
-    shifts: 1
-    distanceF: 20.0
-    NUCL: 2.0
-    NUCLEI_R: 0.07 #[mm]
-    E_bond: 0.0
+    no_fiber:
+      GN_CM: 51.03
+      TARGETVOLUME_CM: 0.88
+      INELASTICITY_CM: 62.32
+      DETACH_CM: 30.93
+      GN_FB: 5.09
+      TARGETVOLUME_FB: 0.79
+      INELASTICITY_FB: 17.91
+      DETACH_FB: 11.22
+      JCMMD: 1013.93
+      JFBMD: 445.77
+      JCMCM: 798.73
+      JFBFB: 473.28
+      JFBCM: 949.22
+      UNLEASH_CM: 0.0
+      UNLEASH_FB: 0.0
+      LMAX_CM: 81.41
+      LMAX_FB: 73.62
+      MAX_FOCALS_CM: 12
+      MAX_FOCALS_FB: 13
+      shifts: 1
+      # distanceF: 20.0
+      NUCL: 2.0
+      NUCLEI_R: 0.007 #[mm]
+      E_bond: 0.0
 
-  single_on_fiber:
-    GN_CM: 238.22
-    TARGETVOLUME_CM: 1.34
-    INELASTICITY_CM: 69.88
-    DETACH_CM: 16.16
-    GN_FB: 9.62
-    TARGETVOLUME_FB: 0.93
-    INELASTICITY_FB: 68.05
-    DETACH_FB: 15.20
-    JCMMD: 474.19
-    JFBMD: 305.80
-    JCMCM: 10000.0
-    JFBFB: 10000.0
-    JFBCM: 10000.0
-    UNLEASH_CM: 28.15
-    UNLEASH_FB: 1.44
-    LMAX_CM: 42.31
-    LMAX_FB: 48.72
-    MAX_FOCALS_CM: 10
-    MAX_FOCALS_FB: 22
-    shifts: 0
-    distanceF: 0.010
-    NUCL: 2.0
-    NUCLEI_R: 0.07 #[mm]
-    E_bond: 0.0
+  single:
+    fiber:
+      GN_CM: 238.22
+      TARGETVOLUME_CM: 1.34
+      INELASTICITY_CM: 69.88
+      DETACH_CM: 16.16
+      GN_FB: 9.62
+      TARGETVOLUME_FB: 0.93
+      INELASTICITY_FB: 68.05
+      DETACH_FB: 15.20
+      JCMMD: 474.19
+      JFBMD: 305.80
+      JCMCM: 10000.0
+      JFBFB: 10000.0
+      JFBCM: 10000.0
+      UNLEASH_CM: 28.15
+      UNLEASH_FB: 1.44
+      LMAX_CM: 42.31
+      LMAX_FB: 48.72
+      MAX_FOCALS_CM: 10
+      MAX_FOCALS_FB: 22
+      shifts: 0
+      # distanceF: 0.010
+      NUCL: 2.0
+      NUCLEI_R: 0.007 #[mm]
+      E_bond: 5.0
 
-
-  single_without_fiber:
-    GN_CM: 47.48
-    TARGETVOLUME_CM: 2.11
-    INELASTICITY_CM: 151.37
-    DETACH_CM: 9.89
-    GN_FB: 26.81
-    TARGETVOLUME_FB: 1.39
-    INELASTICITY_FB: 70.71
-    DETACH_FB: 12.3
-    JCMMD: 427.82
-    JFBMD: 306.96
-    JCMCM: 10000.0
-    JFBFB: 10000.0
-    JFBCM: 10000.0
-    UNLEASH_CM: 0.0
-    UNLEASH_FB: 0.0
-    LMAX_CM: 66.64
-    LMAX_FB: 76.7
-    MAX_FOCALS_CM: 21
-    MAX_FOCALS_FB: 24
-    shifts: 0
-    distanceF: 20.0
-    NUCL: 2.0
-    NUCLEI_R: 0.07 #[mm]
-    E_bond: 0.0
-
+    no_fiber:
+      GN_CM: 47.48
+      TARGETVOLUME_CM: 2.11
+      INELASTICITY_CM: 151.37
+      DETACH_CM: 9.89
+      GN_FB: 26.81
+      TARGETVOLUME_FB: 1.39
+      INELASTICITY_FB: 70.71
+      DETACH_FB: 12.3
+      JCMMD: 427.82
+      JFBMD: 306.96
+      JCMCM: 10000.0
+      JFBFB: 10000.0
+      JFBCM: 10000.0
+      UNLEASH_CM: 0.0
+      UNLEASH_FB: 0.0
+      LMAX_CM: 66.64
+      LMAX_FB: 76.7
+      MAX_FOCALS_CM: 21
+      MAX_FOCALS_FB: 24
+      shifts: 0
+      NUCL: 2.0
+      NUCLEI_R: 0.007 #[mm]
+      E_bond: 0.0
