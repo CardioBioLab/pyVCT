@@ -3,7 +3,7 @@ Virtual Cardiac Tissue Model – A Cellular Potts Model for cardiac monolayers t
 
 ## Build instructions
 `pip install cython pyyaml numpy jupyterlab wandb scikit-image feret pandas seaborn numpngw`  
-`git clone git@github.com:violinist2802/Potts-optimization.git`  
+`git clone https://github.com/CardioBioLab/pyVCT.git`  
 `cd VCT`  
 `make`  
 `cd ..`  
