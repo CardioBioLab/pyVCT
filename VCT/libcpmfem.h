@@ -3,8 +3,8 @@
 #define EXAMPLES_H
 
 int cpmfem(
-	int NCX, int NCY,
-	double PART,
+	int NCX, int NCY, 
+	float* PART_matrix,
 	double VOXSIZE,
 	int NVX, int NVY,
 	double GN_CM,
@@ -28,7 +28,9 @@ int cpmfem(
 	double MAX_FOCALS_FB,
 	int shifts,
 	double distanceF,
+	int SEED,
 	int NRINC,
+	int cyto,
 	char* typ,
 	int* cont_m,
 	int* fibr,

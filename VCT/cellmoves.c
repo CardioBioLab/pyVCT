@@ -5,7 +5,7 @@
 #define LMAX(a) (a==1 ? LMAX_CM : LMAX_FB)
 
 ////////////////////////////////////////////////////////////////////////////////
-double CPM_moves(VOX* pv, short * CCAlabels, BOX* pb, FIBERS* pf, CM* CMs,
+double CPM_moves(VOX* pv, short * CCAlabels, BOX* pb, FIBERS* pf, CM* CMs, 
 int* attached, int* csize, double MAX_FOCALS_CM, double MAX_FOCALS_FB, double TARGETVOLUME_CM, double TARGETVOLUME_FB, double INELASTICITY_CM, double INELASTICITY_FB, double LMAX_CM, double LMAX_FB, double GN_CM, double GN_FB, double UNLEASH_CM, double UNLEASH_FB, double DETACH_CM, double DETACH_FB, double VOXSIZE, int NVX, int NVY, double JCMCM, double JCMMD, double JFBFB, double JFBMD,  double JFBCM)
 // cellular potts model: one Monte Carlo step
 {
@@ -41,7 +41,7 @@ int* attached, int* csize, double MAX_FOCALS_CM, double MAX_FOCALS_FB, double TA
 			{
         		go_on = 1;
         		//if(!pv[xt].contact && !pv[xt].contact && mt_random()%10!=0)			//if contact is not involved -- pick up again
-        		//	go_on = 0;
+        		//	go_on = 0; 
         		//if(go_on && ttag) // if a cell in xt (retracting)
         		if(ttag) // if a cell in xt (retracting)
 				{
@@ -63,7 +63,7 @@ int* attached, int* csize, double MAX_FOCALS_CM, double MAX_FOCALS_FB, double TA
 			if(go_on)
 			{
 				dH = calcdH(pv,pf,CMs,csize,xt,xs,pick,ttag,stag,TARGETVOLUME_CM, TARGETVOLUME_FB, INELASTICITY_CM, INELASTICITY_FB, LMAX_CM, LMAX_FB, GN_CM, GN_FB, UNLEASH_CM, UNLEASH_FB, DETACH_CM, DETACH_FB, VOXSIZE, NVX, JCMCM, JCMMD, JFBFB, JFBMD, JFBCM);
-
+				
         		prob = exp(-IMMOTILITY*dH);
         		if (prob>(rand()/(double)RAND_MAX))
         		{
@@ -147,7 +147,7 @@ double CH_moves(VOX* pv, CM* CMs, double k, double VOXSIZE, int NVX, int NVY)
 			pick = mt_random()%8;
 			xs = nbs[pick]; // pick random neighbor
 			xsy = xs/NVX; xsx = xs%NVX;
-
+			
 			if(pv[xt].contact!=pv[xs].contact && pv[xs].contact!=0)
 			{
         		dH = calcdH_CH(pv, CMs, xt, xs, NVX);
@@ -166,7 +166,7 @@ double CH_moves(VOX* pv, CM* CMs, double k, double VOXSIZE, int NVX, int NVY)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-BOOL splitcheckCCR(VOX* pv, short * CCAlabels, BOX * pb, int*
+BOOL splitcheckCCR(VOX* pv, short * CCAlabels, BOX * pb, int* 
 csize, int xt, int ttag, int NVX, int NVY)
 {
 	BOOL split;

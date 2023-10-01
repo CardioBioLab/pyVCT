@@ -1,15 +1,14 @@
 from utils.parse_config import parse_config
-
-from libc.stdlib cimport free, malloc
-
+from libc.stdlib cimport malloc, free
 import numpy as np
+
 from Cython.Compiler import Options
 
 Options.docstrings = True
 
 cdef extern from "libcpmfem.h":
-	int cpmfem(int NCX, int NCY,
-	double PART,
+	int cpmfem(int NCX, int NCY, 
+	float* PART_matrix,
 	double VOXSIZE,
 	int NVX, int NVY,
 	double GN_CM,
@@ -32,13 +31,16 @@ cdef extern from "libcpmfem.h":
 	double MAX_FOCALS_CM,
 	double MAX_FOCALS_FB,
 	int shifts,
-	double distanceF, int NRINC,
+	double distanceF,
+	int SEED,
+	int NRINC,
+	int cyto,
 	char* typ,
 	int* cont_m,
 	int* fibr,
 	int* ctag_m)
-
-cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double sizeY, scenario, NRINC):
+	
+def py_cpmfem(int NCX, int NCY, PART_matrix, double VOXSIZE, double sizeX, double sizeY, scenario, SEED, NRINC, cyto, **kwargs):
 	'''
 	Simulates VCT model
 	Args:
@@ -64,8 +66,20 @@ cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double siz
 	cdef int* fibr = <int*>malloc(NVX*NVY*sizeof(int))
 	cdef int* ctag_m = <int*>malloc(NVX*NVY*sizeof(int))
 
+	cdef float* matrix = <float*>malloc(NVX*NVY*sizeof(float))
+	if type(PART_matrix)==float:
+		for i in range(NVX*NVY):
+			matrix[i]=PART_matrix
+	if type(PART_matrix)==type(np.array([[0,1],[1,0]])):
+		for i in range(NVY):
+			for j in range(NVX):
+				k=j+NVX*i
+				matrix[k]=PART_matrix[i][j]
+
 	cfg = parse_config('./utils/config.yaml', scenario)
-	cpmfem(NCX, NCY, PART, VOXSIZE, NVX, NVY, cfg['GN_CM'], cfg['GN_FB'], cfg['TARGETVOLUME_CM'], cfg['TARGETVOLUME_FB'], cfg['DETACH_CM'], cfg['DETACH_FB'], cfg['INELASTICITY_FB'], cfg['INELASTICITY_CM'],  cfg['JCMMD'], cfg['JFBMD'], cfg['JCMCM'], cfg['JFBFB'], cfg['JFBCM'], cfg['UNLEASH_CM'], cfg['UNLEASH_FB'], cfg['LMAX_CM'], cfg['LMAX_FB'], cfg['MAX_FOCALS_CM'], cfg['MAX_FOCALS_FB'], cfg['shifts'], cfg['distanceF'], NRINC, typ, cont_m, fibr, ctag_m)
+	for arg, value in kwargs.items():
+		cfg[arg]=value
+	cpmfem(NCX, NCY, matrix, VOXSIZE, NVX, NVY, cfg['GN_CM'], cfg['GN_FB'], cfg['TARGETVOLUME_CM'], cfg['TARGETVOLUME_FB'], cfg['DETACH_CM'], cfg['DETACH_FB'], cfg['INELASTICITY_FB'], cfg['INELASTICITY_CM'],  cfg['JCMMD'], cfg['JFBMD'], cfg['JCMCM'], cfg['JFBFB'], cfg['JFBCM'], cfg['UNLEASH_CM'], cfg['UNLEASH_FB'], cfg['LMAX_CM'], cfg['LMAX_FB'], cfg['MAX_FOCALS_CM'], cfg['MAX_FOCALS_FB'], cfg['shifts'], cfg['distanceF'], SEED, NRINC, cyto, typ, cont_m, fibr, ctag_m)
 	types=[]
 	ctags=[]
 	fibers=[]
@@ -82,13 +96,14 @@ cpdef py_cpmfem(int NCX, int NCY, PART, double VOXSIZE, double sizeX, double siz
 			contacts[i].append(cont_m[k])
 	for i in range(NCX*NCY):
 		types.append(int(typ[i]))
-
+	
 	types=np.array(types)
 	ctags=np.array(ctags)
 	fibers=np.array(fibers)
-	contacts=np.array(contacts)
+	contacts=np.array(contacts)		
 	free(typ)
 	free(cont_m)
 	free(fibr)
 	free(ctag_m)
 	return types, ctags, fibers, contacts
+

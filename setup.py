@@ -1,23 +1,26 @@
+from distutils.core import setup
+from distutils.extension import Extension
+from Cython.Build import cythonize
 import os
 import os.path
 import shutil
-from distutils.core import setup
-from distutils.extension import Extension
 
-from Cython.Build import cythonize
 
 extension = Extension(
     name="pyVCT",
     sources=["libcpmfem.pyx"],
     libraries=["cpmfem"],
     library_dirs=["VCT"],
-    include_dirs=["VCT"],
+    include_dirs=["VCT"]
 )
-setup(name="pyVCT", ext_modules=cythonize([extension]))
+setup(
+    name="pyVCT",
+    ext_modules=cythonize([extension], language_level = 3)
+)
 
-os.remove("libcpmfem.c")
-shutil.rmtree("build")
-if not os.path.isdir("output"):
-    os.mkdir("output")
-if not os.path.isdir("imgs"):
-    os.mkdir("imgs")
+os.remove('libcpmfem.c')
+shutil.rmtree('build')
+if not os.path.isdir('output'):
+    os.mkdir('output')
+if not os.path.isdir('imgs'):
+    os.mkdir('imgs')

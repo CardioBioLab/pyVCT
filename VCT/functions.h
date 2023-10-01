@@ -10,15 +10,15 @@
 // init.c
 int* 		alloc_attach(int NRc);
 VOX*		init_voxels(int NVX, int NVY);
-int 		init_cells(VOX* pv, int * types, BOX* pb, int NCX, int NCY, double PART, int shifts, double TARGETVOLUME_FB, double VOXSIZE, int NVX, int NVY);
+int 		init_cells(VOX* pv, int * types, BOX* pb, int NCX, int NCY, float* PART_matrix, int shifts, double TARGETVOLUME_FB, double VOXSIZE, int NVX, int NVY);
 FIBERS* 	set_fibers(double distanceF, double VOXSIZE, int NVX, int NVY);
 
 
 // cellmoves.c
-double 		CPM_moves(VOX* pv, short * CCAlabels,BOX* pb, FIBERS* pf,
+double 		CPM_moves(VOX* pv, short * CCAlabels,BOX* pb, FIBERS* pf, 
 CM* CMs, int* attached, int* csize, double MAX_FOCALS_CM, double MAX_FOCALS_FB, double TARGETVOLUME_CM, double TARGETVOLUME_FB, double INELASTICITY_CM, double INELASTICITY_FB, double LMAX_CM, double LMAX_FB, double GN_CM, double GN_FB, double UNLEASH_CM, double UNLEASH_FB, double DETACH_CM, double DETACH_FB, double VOXSIZE, int NVX, int NVY, double JCMCM, double JCMMD, double JFBFB, double JFBMD,  double JFBCM);
 double 		CH_moves(VOX* pv, CM* CMs, double k, double VOXSIZE, int NVX, int NVY);
-BOOL 		splitcheckCCR(VOX* pv, short * CCAlabels, BOX* pb,
+BOOL 		splitcheckCCR(VOX* pv, short * CCAlabels, BOX* pb,  
 int* csize, int xt, int ttag, int NVX, int NVY);
 
 // CM.c
@@ -64,3 +64,5 @@ unsigned 	mystrlen(const char *s);
 // mt.c
 void 		mt_init();
 unsigned long mt_random();
+
+

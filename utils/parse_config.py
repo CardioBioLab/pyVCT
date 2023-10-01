@@ -1,6 +1,4 @@
 import yaml
-
-
 def parse_config(path: str, scenario: str) -> dict:
     """
     Parse yaml file
@@ -12,7 +10,7 @@ def parse_config(path: str, scenario: str) -> dict:
         cfg: dict, dictionary with new params
     """
     with open(path) as f:
-        data = yaml.load(f)
-        cfg = data["neonatal_rat"][scenario]
+        data= yaml.load(f, Loader=yaml.FullLoader)
+        cfg=data['neonatal_rat'][scenario]
 
     return cfg

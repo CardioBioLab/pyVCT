@@ -8,8 +8,8 @@
 
 
 int cpmfem(
-	int NCX, int NCY,
-	double PART,
+	int NCX, int NCY, 
+	float* PART_matrix,
 	double VOXSIZE,
 	int NVX, int NVY,
 	double GN_CM,
@@ -33,12 +33,14 @@ int cpmfem(
 	double MAX_FOCALS_FB,
 	int shifts,
 	double distanceF,
+	int SEED,
 	int NRINC,
+	int cyto,
 	char* typ,
 	int* cont_m,
 	int* fibr,
 	int* ctag_m
-
+	
 )
 {
 
@@ -53,9 +55,18 @@ int cpmfem(
 	int *csize;
 	int incr, startincr;
 	double acceptance, acceptance_phi;
-	CONT = 0;
-    CONT_INHIB = 1;
+	
+	if (cyto ==1){
+		E_bond = 5.0;
+		CONT = (char)1;
+    	CONT_INHIB = (char)0;}
 
+	if (cyto == 0){
+		E_bond = 0.0;
+		CONT = (char)0;
+    	CONT_INHIB = (char)1;}
+
+	
 	if(!silence){
 		printf("SEED = %d\n",SEED);
 		printf("Sample size = %d x %d\n",NCX,NCY);
@@ -98,7 +109,7 @@ int cpmfem(
 
 	startincr = 0;
 	types = calloc((NCX*NCY+1), sizeof(int));
-	NRc = init_cells(pv,types,pb,NCX,NCY, PART, shifts, TARGETVOLUME_FB, VOXSIZE, NVX, NVY);write_cells(pv,0, NVX, NVY);
+	NRc = init_cells(pv,types,pb,NCX,NCY, PART_matrix, shifts, TARGETVOLUME_FB, VOXSIZE, NVX, NVY);write_cells(pv,0, NVX, NVY);
 	csize = calloc(NRc, sizeof(int)); for(c=0;c<NRc;c++) {csize[c]=0;}
 	for(v=0;v<NV;v++) {if(pv[v].ctag) {csize[pv[v].ctag-1]++;}}
 
@@ -167,7 +178,7 @@ int cpmfem(
 	gettimeofday(&tv, NULL);
 	if(!silence)
 	printf("Took %lds\n", tv.tv_sec - time);
-
+	
 	//fill our outer massives//
 	int i,j,k;
 	for(i=0; i<NVX; i++) {
@@ -185,9 +196,10 @@ int cpmfem(
 
 	printf("\nmassives done!\n");
 
-	free(pv);
+	free(pv); 
 	free(pf);
 	free(CCAlabels);
-
+	
 	return 0;
 }
+

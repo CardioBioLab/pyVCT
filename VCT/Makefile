@@ -8,7 +8,7 @@ OBJECTS = CPM_dH.o \
 	write.o
 
 # include standard C library
-LDFLAGS += -lc
+LDFLAGS += -lc 
 # include standard math library
 LDFLAGS += -lm
 CFLAGS +=-fPIC
@@ -25,3 +25,4 @@ clean:
 	rm ./imgs/*.png
 	rm cpmfem
 	rm *.a
+
