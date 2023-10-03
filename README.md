@@ -13,6 +13,6 @@ Virtual Cardiac Tissue Model – A Cellular Potts Model for cardiac monolayers t
 `cd VCT`  
 `make`  
 `cd ..`  
-`python setup.py build_ext --inplace`    
+`python3 setup.py build_ext --inplace`    
 ## Usage
 `run example.ipynb file`
