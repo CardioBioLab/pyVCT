@@ -21,7 +21,7 @@ from PIL import Image
 
 def image_to_map(path, resolution, VOX_SIZE, mean_area, sizeMarginX, sizeMarginY):
     im = Image.open(path)
-    image = np.asarray(im)
+    image = np.asarray(im).T
     image = image/image.max()
     scale = int(resolution/VOX_SIZE)
     indentX = int(sizeMarginX/VOX_SIZE)
